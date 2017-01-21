@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block page_content %}
+<form name="team" action="{{ formAction }}" method="{{ formMethod }}">
+  <fieldset>
+      <div>
+        <label for="name">Team name</label> <br>
+        <input type="text" name="name" value="{{ team.name }}" required>
+      </div>
+      <div>
+        <label for="spots">Places to eat the food:</label> <br>
+        <small><a id="add-spot" href="">Add a spot</a></small>
+        <div id="spots-list">
+        {# TODO: if you change the html here, make sure to also do it in server/public/scripts/team-form.js #}
+        {% for spot in team.spots %}
+          <div>
+            <input type="text" name="spots[{{loop.index0}}]" value="{{ spot }}"><a data-id="{{loop.index0}}">&times;</a>
+          </div>
+        {% endfor %}
+        </div>
+      </div>
+      <div>
+        <button type="submit">Save</button>
+      </div>
+  </fieldset>
+</form>
+{% endblock %}
+{% block scripts %}
+<script src="/scripts/team-form.js"></script>
+{% endblock %}

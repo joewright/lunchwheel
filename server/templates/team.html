@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block page_content %}
+
+<h1>{{ team.name }}</h1>
+{% if team.latestPick %}
+    Winner!
+    <marquee behavior="alternate" direction="right">{{ team.latestPick }}</marquee>
+{% endif %}
+<ul>
+{% for spot in team.spots %}
+    <li>{{ spot }}</li>
+{% endfor %}
+</ul>
+<a href="/teams/{{ team._id }}/edit">Edit</a>
+
+{% endblock %}
+{% block scripts %}
+<script src="/scripts/decision-maker.js"></script>
+{% endblock %}
