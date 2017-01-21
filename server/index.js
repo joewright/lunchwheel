@@ -3,7 +3,7 @@ var express = require('express');
 var swig = require('swig');
 
 var Config = {
-    WEB_PORT: process.env.WEB_PORT || 3000,
+    WEB_PORT: process.env.PORT || 3000,
     APP_ENV: process.env.APP_ENV || 'local',
     COUCH_URL: process.env.COUCH_URL || 'http://localhost:5984',
     COUCH_DB_NAME: process.env.COUCH_DB_NAME || 'lunchwheel',
