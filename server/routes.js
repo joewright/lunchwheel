@@ -11,6 +11,8 @@ exports.setup = function(app) {
     });
     app.get('/', views.homeGet());
 
+    app.get('/teams', teamViews.index());
+
     app.get('/teams/new', teamViews.editorGet());
     app.get('/teams/:id/edit', teamViews.load(), teamViews.editorGet());
     app.get('/teams/:id', teamViews.load(), teamViews.show());

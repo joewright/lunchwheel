@@ -6,15 +6,39 @@ var TeamsView = module.exports = function(options) {
 TeamsView.prototype.load = function() {
     var self = this;
     return function(req, res, next) {
-        if (req.params.id) {
-            return self.model.get(req.params.id, function(err, existing) {
-                if (err || !existing) {
-                    return res.status(404).render('404');
-                }
-                res.locals.team = existing;
-                next();
-            });
-        }
+        self.model.get(req.params.id, function(err, existing) {
+            if (err || !existing) {
+                return res.status(404).render('404');
+            }
+            res.locals.team = existing;
+            next();
+        });
+    };
+};
+
+TeamsView.prototype.index = function() {
+    var self = this;
+    return function(req, res, next) {
+        var queryOpts = {
+            limit: 20,
+            skip: req.query.skip || 0,
+            descending: false
+        };
+        self.model.db.query('by_name/lc', queryOpts, function(err, results) {
+            var ctx = {
+                rows: results.rows,
+                total_rows: results.total_rows
+            };
+            if (results.rows.length >= queryOpts.limit) {
+                ctx.next_page = results.offset + queryOpts.limit;
+            }
+            if (!results.rows.length) {
+                ctx.previous_page = 0;
+            } else if (results.offset) {
+                ctx.previous_page = results.offset - queryOpts.limit;
+            }
+            res.render('teams-index', ctx);
+        });
     };
 };
 

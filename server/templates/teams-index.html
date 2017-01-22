@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block page_content %}
+<h1>Lunch Teams</h1>
+{% if previous_page !== undefined %}
+<a href="/teams?skip={{ previous_page }}">&laquo; Previous</a>
+{% endif %}
+{% if next_page %}
+<a href="/teams?skip={{ next_page }}">Next &raquo;</a>
+{% endif %}
+
+{% for result in rows %}
+<ul>
+    <li><a href="/teams/{{ result.id }}">{{ result.key }}</a></li>
+</ul>
+{% endfor %}
+{{ total_rows }} Total
+{% endblock %}

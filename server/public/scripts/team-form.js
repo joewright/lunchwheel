@@ -6,6 +6,10 @@
         var addItem = document.getElementById(addButtonId);
         var listContainer = document.getElementById(listContainerId);
 
+        for (let x = 0; x < listContainer.children.length; x++) {
+            listContainer.children[x].children[1].addEventListener('click', removeClicked);
+        }
+
         return {
             listContainer: listContainer,
             addItem: addItem,
