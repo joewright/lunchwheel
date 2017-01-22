@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var async = require('async');
 
 var schema = {
     name: '',
@@ -14,8 +15,33 @@ var TeamModel = module.exports = function(values) {
     _.extend(this, copy);
 };
 
+TeamModel.designs = [{
+    _id: '_design/by_name',
+    views: {
+        lc: {
+            map: function(doc) {
+                emit(doc.name && doc.name.toLowerCase(), 1);
+            }.toString()
+        }
+    },
+    language: 'javascript'
+}];
+
 TeamModel.connect = function(db) {
     this.db = db;
+    var self = this;
+    async.each(self.designs, ensureDesignDoc, function(err) {
+        console.log('Design docs synced');
+    });
+
+    function ensureDesignDoc(designDoc, nextDoc) {
+        self.db.get(designDoc._id, function(err, existing) {
+            if (existing) {
+                designDoc._rev = existing._rev;
+            }
+            self.db.post(designDoc, nextDoc);
+        });
+    }
 };
 
 TeamModel.prototype.save = function(callback) {
