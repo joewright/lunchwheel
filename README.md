@@ -8,6 +8,15 @@ You'll need values for the environment variables found in [example.env](example.
 
 Once you have your environment set up, run the server
 
-```
+```bash
 node index.js
+```
+
+If you have [heroku cli](https://devcenter.heroku.com/articles/heroku-cli) installed you can run locally by doing
+```bash
+# create an .env file
+cp example.env .env
+
+# run the app
+heroku local
 ```
