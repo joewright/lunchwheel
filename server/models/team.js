@@ -7,21 +7,15 @@ var schema = {
 };
 
 var TeamModel = module.exports = function(values) {
-    values = _.defaults(values, schema, this.__proto__);
-    for (key in values) {
-        this[key] = values[key];
-    }
+    var copy = _.chain(values)
+        .cloneDeep()
+        .defaults(copy, schema, this.__proto__)
+        .value();
+    _.extend(this, copy);
 };
 
 TeamModel.connect = function(db) {
     this.db = db;
-};
-
-TeamModel.get = function(id, callback) {
-    var self = this;
-    this.db.get(id, function(err, res) {
-        callback(err, new self(res));
-    });
 };
 
 TeamModel.prototype.save = function(callback) {

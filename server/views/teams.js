@@ -6,11 +6,11 @@ var TeamsView = module.exports = function(options) {
 TeamsView.prototype.load = function() {
     var self = this;
     return function(req, res, next) {
-        self.model.get(req.params.id, function(err, existing) {
+        self.model.db.get(req.params.id, function(err, existing) {
             if (err || !existing) {
                 return res.status(404).render('404');
             }
-            res.locals.team = existing;
+            res.locals.team = new self.model(existing);
             next();
         });
     };
@@ -57,14 +57,12 @@ TeamsView.prototype.editorGet = function() {
             team: new self.model({
                 spots: ['']
             }),
-            formAction: '/teams',
-            formMethod: 'post'
+            formAction: '/teams'
         };
         if (res.locals.team) {
             ctx = {
                 team: res.locals.team,
-                formAction: '/teams/' + res.locals.team._id,
-                formMethod: 'post'
+                formAction: '/teams/' + res.locals.team._id
             };
         }
         res.render('team-form', ctx);
@@ -76,7 +74,7 @@ TeamsView.prototype.formPost = function() {
     return function(req, res, next) {
         var team = new self.model(req.body);
         if (res.locals.team) {
-            team = _.defaults(team, res.locals.team);
+            team = _.defaults(req.body, res.locals.team);
         }
         team.save(function(err, saved) {
             if (err || !saved) {

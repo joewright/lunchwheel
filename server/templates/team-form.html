@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block page_content %}
-<form name="team" action="{{ formAction }}" method="{{ formMethod }}">
+<form name="team" action="{{ formAction }}" method="POST">
   <fieldset>
       <div>
         <label for="name">Team name</label> <br>
@@ -18,6 +18,7 @@
         {% endfor %}
         </div>
       </div>
+      <input id="latest-pick-input" name="latestPick" type="hidden" value="">
       <div>
         <button type="submit">Save</button>
       </div>

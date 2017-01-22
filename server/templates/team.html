@@ -1,17 +1,25 @@
 {% extends 'base.html' %}
 {% block page_content %}
+<br>
+<strong>Lunch spots for: {{ team.name }}</strong> <small><a href="/teams/{{ team._id }}/edit">Edit</a></small>
 
-<h1>{{ team.name }}</h1>
-{% if team.latestPick %}
-    Winner!
-    <marquee behavior="alternate" direction="right">{{ team.latestPick }}</marquee>
-{% endif %}
-<ul>
+<ul id="choices">
 {% for spot in team.spots %}
-    <li>{{ spot }}</li>
+    <li data-val="{{ spot }}">{{ spot }}</li>
 {% endfor %}
 </ul>
-<a href="/teams/{{ team._id }}/edit">Edit</a>
+
+<button id="picker-clicker">What am I getting?</button>
+<br>
+<br>
+<div id="pick-container" {% if !team.latestPick %} class="hidden" {% endif %}>
+    <em>you're getting:</em>
+    <h1 id="latest-pick" class="animated lightSpeedIn">{{ team.latestPick }}</h1>
+    <form name="team-edit" action="/teams/{{team._id}}" method="POST">
+        <input id="latest-pick-input" name="latestPick" type="hidden" value="{{ team.latestPick }}">
+        <button type="submit">Save</button>
+    </form>
+</div>
 
 {% endblock %}
 {% block scripts %}
